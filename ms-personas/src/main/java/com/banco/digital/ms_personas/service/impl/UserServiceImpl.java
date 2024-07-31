@@ -15,6 +15,8 @@ import com.banco.digital.ms_personas.request.UserRequest;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.response.UserStateValidationResponse;
 import com.banco.digital.ms_personas.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
     private AddressRepository addressRepository;
 
     @Autowired
-    private KafkaTemplate<String, UserAccountRequest> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public List<User> findAll() {
@@ -57,12 +59,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response createUser(UserRequest userRequest) {
+    public Response createUser(UserRequest userRequest) throws JsonProcessingException {
         UserStateValidationResponse stateValidationResponse = validateUserData(userRequest);
 
         return switch (stateValidationResponse.getState()) {
             case ACTIVO -> new Response("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
-            case INACTIVO -> new Response("The user is inactive.", HttpStatus.CONFLICT.value()); //volver a generar alta ?
+            case INACTIVO ->
+                    new Response("The user is inactive.", HttpStatus.CONFLICT.value()); //volver a generar alta ?
             case BLOQUEADO -> new Response("The user is blocked.", HttpStatus.FORBIDDEN.value());
             case CANCELADO -> new Response("The user is canceled.", HttpStatus.FORBIDDEN.value());
             case SUSPENDIDO ->
@@ -71,9 +74,13 @@ public class UserServiceImpl implements UserService {
                 User user = generateUser(userRequest);
                 UserAccountRequest userAccountRequest = UserAccountRequest.builder()
                         .persNum(user.getIdUser())
-                        .salary(userRequest.getSalary()).build();
+                        .salary(userRequest.getSalary())
+                        .build();
 
-                kafkaTemplate.send("alta-usuario", userAccountRequest);
+                String jsonMessage = new ObjectMapper().writeValueAsString(userAccountRequest);
+
+                kafkaTemplate.send("alta-usuario", jsonMessage);
+
                 yield new Response("Usuario Creado!", HttpStatus.CREATED.value());
             }
         };

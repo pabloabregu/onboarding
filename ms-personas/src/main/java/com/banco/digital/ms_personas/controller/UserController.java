@@ -3,6 +3,7 @@ package com.banco.digital.ms_personas.controller;
 import com.banco.digital.ms_personas.request.UserRequest;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class UserController {
      * @return ResponseEntity con la respuesta de la operación.
      */
     @PostMapping("/createUser")
-    public ResponseEntity<Response> createUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<Response> createUser(@RequestBody UserRequest userRequest) throws JsonProcessingException {
         Response response = userService.createUser(userRequest);
         return ResponseEntity.ok(response);
     }

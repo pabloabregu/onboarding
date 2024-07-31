@@ -1,20 +1,22 @@
 package com.banco.digital.ms_cuentas.config.listeners;
 
 import com.banco.digital.ms_cuentas.request.UserAccountRequest;
-import com.banco.digital.ms_cuentas.service.AccountService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
 
+import java.io.IOException;
+
 @Configuration
 public class KafkaConsumerListener {
-    //private Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerListener.class);
-
-    //private AccountService accountService;
+    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @KafkaListener(topics = "alta-usuario", groupId = "cuentas")
-    public void listener(UserAccountRequest request) {
-        System.out.println("Received: " + request.toString());
+    public void listener(String request) throws IOException {
+        UserAccountRequest userAccountRequest = new ObjectMapper().readValue(request, UserAccountRequest.class);
+
+        logger.info("User ID : {}, Salary: {}", userAccountRequest.getPersNum(), userAccountRequest.getSalary());
     }
 }
