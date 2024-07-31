@@ -1,8 +1,8 @@
 package com.banco.digital.ms_cuentas.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -11,7 +11,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserAccountRequest{
+public class UserAccountRequest implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private Long personNumber;
     private BigDecimal salary;
 }

@@ -9,13 +9,12 @@ import org.springframework.kafka.annotation.KafkaListener;
 
 @Configuration
 public class KafkaConsumerListener {
-    private Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerListener.class);
+    //private Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerListener.class);
 
-    private AccountService accountService;
+    //private AccountService accountService;
 
-    @KafkaListener(topics = "topic_name", groupId = "cuentas")
+    @KafkaListener(topics = "alta-usuario", groupId = "cuentas")
     public void listener(UserAccountRequest request) {
-        System.out.println("Test Listener");
         System.out.println("Received: " + request.toString());
     }
 }
