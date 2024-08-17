@@ -13,5 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class UserAccountRequest {
     private Long persNum;
+    private String dni;
     private BigDecimal salary;
+    private String event;
 }
