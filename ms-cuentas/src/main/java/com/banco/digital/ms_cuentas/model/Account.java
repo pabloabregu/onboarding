@@ -1,22 +1,22 @@
 package com.banco.digital.ms_cuentas.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cuentas")
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     @Setter
     @Column(name = "numcue", nullable = false)
-    private Long accountNumber;
+    private String accountNumber;
 
     @Getter
     @Setter
@@ -37,6 +37,6 @@ public class Account {
 
     @Getter
     @Setter
-    @Column(name = "saldo", nullable = false, precision = 10, scale = 0)
+    @Column(name = "saldo", nullable = false, precision = 10)
     private BigDecimal salary;
 }
