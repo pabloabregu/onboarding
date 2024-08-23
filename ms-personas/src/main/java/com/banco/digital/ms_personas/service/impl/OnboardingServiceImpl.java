@@ -1,5 +1,6 @@
 package com.banco.digital.ms_personas.service.impl;
 
+import com.banco.digital.ms_personas.constants.KafkaEvents;
 import com.banco.digital.ms_personas.enums.State;
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
@@ -31,9 +32,6 @@ public class OnboardingServiceImpl implements OnboardingService {
     @Autowired
     private KafkaService kafkaService;
 
-    @Value("${kafka-topic.alta-usuario}")
-    private String nameKafkaTopic;
-
     @Override
     public Response register(UserRequest userRequest) throws JsonProcessingException {
         // validate user
@@ -64,7 +62,7 @@ public class OnboardingServiceImpl implements OnboardingService {
                 logger.trace("NEW ADDRESS : {}", address);
 
                 //kafka event
-                kafkaService.sendEvent(nameKafkaTopic, user, userRequest);
+                kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRequest);
 
                 return new Response("User created!", HttpStatus.CREATED.value());
             }
