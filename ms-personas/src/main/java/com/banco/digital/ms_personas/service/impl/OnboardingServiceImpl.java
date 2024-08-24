@@ -19,53 +19,59 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OnboardingServiceImpl implements OnboardingService {
-
     private static final Logger logger = LoggerFactory.getLogger(OnboardingServiceImpl.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final AddressService addressService;
+    private final KafkaService kafkaService;
 
     @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    private KafkaService kafkaService;
+    public OnboardingServiceImpl(UserService userService, AddressService addressService, KafkaService kafkaService) {
+        this.userService = userService;
+        this.addressService = addressService;
+        this.kafkaService = kafkaService;
+    }
 
     @Override
-    public Response register(UserRequest userRequest) throws JsonProcessingException {
-        // validate user
-        State stateUser = userService.validateUser(userRequest);
+    public Response register(UserRequest userRequest) {
+        try {
+            // validate user
+            State stateUser = userService.validateUser(userRequest);
 
-        switch (stateUser) {
-            case ACTIVO -> {
-                return new Response("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
-            }
-            case INACTIVO -> {
-                return new Response("The user is inactive.", HttpStatus.CONFLICT.value()); //volver a generar alta ?
-            }
-            case BLOQUEADO -> {
-                return new Response("The user is blocked.", HttpStatus.FORBIDDEN.value());
-            }
-            case CANCELADO -> {
-                return new Response("The user is canceled.", HttpStatus.FORBIDDEN.value());
-            }
-            case SUSPENDIDO -> {
-                return new Response("The user is suspended.", HttpStatus.FORBIDDEN.value()); //volver a generar alta ?
-            }
-            case NO_EXISTE -> {
-                //create user and address
-                User user = userService.generateUser(userRequest);
-                Address address = addressService.generateAddress(userRequest, user);
+            switch (stateUser) {
+                case ACTIVO -> {
+                    return new Response("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
+                }
+                case INACTIVO -> {
+                    return new Response("The user is inactive.", HttpStatus.CONFLICT.value()); //volver a generar alta ?
+                }
+                case BLOQUEADO -> {
+                    return new Response("The user is blocked.", HttpStatus.FORBIDDEN.value());
+                }
+                case CANCELADO -> {
+                    return new Response("The user is canceled.", HttpStatus.FORBIDDEN.value());
+                }
+                case SUSPENDIDO -> {
+                    return new Response("The user is suspended.", HttpStatus.FORBIDDEN.value()); //volver a generar alta ?
+                }
+                case NO_EXISTE -> {
+                    //create user and address
+                    User user = userService.generateUser(userRequest);
+                    Address address = addressService.generateAddress(userRequest, user);
 
-                logger.trace("NEW USER : {}", user);
-                logger.trace("NEW ADDRESS : {}", address);
+                    logger.trace("NEW USER : {}", user);
+                    logger.trace("NEW ADDRESS : {}", address);
 
-                //kafka event
-                kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRequest);
+                    //kafka event
+                    kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRequest);
 
-                return new Response("User created!", HttpStatus.CREATED.value());
+                    return new Response("User created!", HttpStatus.CREATED.value());
+                }
+                default -> throw new IllegalStateException("Error");
             }
-            default -> throw new IllegalStateException("Error");
+        } catch (JsonProcessingException ex) {
+            logger.error("JSON Processing Error: {}", ex.getMessage());
+            return new Response("Error : JSON Processing", HttpStatus.PROCESSING.value());
         }
     }
 }
