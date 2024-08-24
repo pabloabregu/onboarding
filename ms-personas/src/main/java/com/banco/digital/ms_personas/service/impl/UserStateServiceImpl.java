@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class UserStateServiceImpl implements UserStateService {
 
+    private final UserStateRepository userStateRepository;
+
     @Autowired
-    private UserStateRepository userStateRepository;
+    public UserStateServiceImpl(UserStateRepository userStateRepository) {
+        this.userStateRepository = userStateRepository;
+    }
 
     @Override
     public List<UserState> findAll() {

@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class UserTypeServiceImpl implements UserTypeService {
 
+    private final UserTypeRepository userTypeRepository;
+
     @Autowired
-    private UserTypeRepository userTypeRepository;
+    public UserTypeServiceImpl(UserTypeRepository userTypeRepository) {
+        this.userTypeRepository = userTypeRepository;
+    }
 
     @Override
     public List<UserType> findAll() {

@@ -3,7 +3,6 @@ package com.banco.digital.ms_personas.controller;
 import com.banco.digital.ms_personas.request.UserRequest;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.service.OnboardingService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -13,8 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaService {
 
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    public KafkaService(KafkaTemplate<String, String> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Value("${kafka-topic.alta-usuario}")
     private String nameKafkaTopic;
