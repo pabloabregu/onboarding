@@ -1,6 +1,6 @@
 package com.banco.digital.ms_personas.service.impl;
 
-import com.banco.digital.ms_personas.constants.KafkaEvents;
+import com.banco.digital.ms_personas.util.KafkaEvents;
 import com.banco.digital.ms_personas.enums.State;
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
