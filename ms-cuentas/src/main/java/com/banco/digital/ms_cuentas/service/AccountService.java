@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 
-public interface AccountService extends BaseService<Account, Long>{
-    public Response createAccount(String salary);
-
-    Response externalValidation(String dni) throws URISyntaxException, IOException, InterruptedException;
-    
+public interface AccountService extends BaseService<Account, Long> {
+    void save(Account account);
     Response externalValidation(String dni, BigDecimal salary) throws URISyntaxException, IOException, InterruptedException;
+    boolean existsByAccountNumber(String accountNumber);
 }
