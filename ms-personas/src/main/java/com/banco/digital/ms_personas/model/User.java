@@ -5,7 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "usuarios")
-@ToString
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,35 +13,25 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     @Column(name = "persnum")
     private Long idUser;
 
-    @Getter
-    @Setter
     @Column(name = "nombre")
     private String firstname;
 
-    @Getter
-    @Setter
     @Column(name = "apellido")
     private String lastname;
 
-    @Getter
-    @Setter
     @Column(name = "dni")
     private String dni;
 
     @ManyToOne
-    @Getter
-    @Setter
     @JoinColumn(name = "estado")
+    @ToString.Exclude
     private UserState state;
 
     @ManyToOne
-    @Getter
-    @Setter
     @JoinColumn(name = "tipo")
+    @ToString.Exclude
     private UserType type;
 }
