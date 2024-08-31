@@ -8,7 +8,7 @@ import com.banco.digital.ms_personas.model.UserType;
 import com.banco.digital.ms_personas.repository.UserRepository;
 import com.banco.digital.ms_personas.repository.UserStateRepository;
 import com.banco.digital.ms_personas.repository.UserTypeRepository;
-import com.banco.digital.ms_personas.request.UserRequest;
+import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public State validateUser(UserRequest userRequest) {
-        return findByDni(userRequest.getDni())
+    public State validateUser(UserRegisterRequest userRegisterRequest) {
+        return findByDni(userRegisterRequest.getDni())
                 .map(user -> switch (user.getState().getDescription().toUpperCase()) {
                     case "ACTIVO" -> State.ACTIVO;
                     case "INACTIVO" -> State.INACTIVO;
@@ -59,13 +59,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User generateUser(UserRequest userRequest) {
+    public User generateUser(UserRegisterRequest userRegisterRequest) {
         UserState userState = userStateRepository.findByDescription(State.ACTIVO.name());
         UserType userType = userTypeRepository.findByDescription(Type.CLIENTE.name());
         User user = User.builder()
-                .firstname(userRequest.getFirstname())
-                .lastname(userRequest.getLastname())
-                .dni(userRequest.getDni())
+                .firstname(userRegisterRequest.getFirstname())
+                .lastname(userRegisterRequest.getLastname())
+                .dni(userRegisterRequest.getDni())
                 .state(userState)
                 .type(userType)
                 .build();
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeStateFromUser(UserRequest userRequest, String activo) {
+    public void changeStateFromUser(UserRegisterRequest userRegisterRequest, String activo) {
 
     }
 }

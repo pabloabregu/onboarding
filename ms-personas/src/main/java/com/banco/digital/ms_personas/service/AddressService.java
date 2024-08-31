@@ -2,8 +2,8 @@ package com.banco.digital.ms_personas.service;
 
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
-import com.banco.digital.ms_personas.request.UserRequest;
+import com.banco.digital.ms_personas.request.UserRegisterRequest;
 
 public interface AddressService {
-    Address generateAddress(UserRequest userRequest, User user);
+    Address generateAddress(UserRegisterRequest userRegisterRequest, User user);
 }

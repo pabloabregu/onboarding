@@ -1,6 +1,6 @@
 package com.banco.digital.ms_personas.controller;
 
-import com.banco.digital.ms_personas.request.UserRequest;
+import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.service.OnboardingService;
 import jakarta.validation.Valid;
@@ -23,8 +23,8 @@ public class OnboardingController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Response> registerUser(@Valid @RequestBody UserRequest userRequest) {
-        Response response = onboardingService.register(userRequest);
+    public ResponseEntity<Response> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        Response response = onboardingService.register(userRegisterRequest);
         return ResponseEntity.ok(response);
     }
 }

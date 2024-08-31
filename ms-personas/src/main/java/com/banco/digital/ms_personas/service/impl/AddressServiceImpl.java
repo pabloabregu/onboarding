@@ -3,7 +3,7 @@ package com.banco.digital.ms_personas.service.impl;
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
 import com.banco.digital.ms_personas.repository.AddressRepository;
-import com.banco.digital.ms_personas.request.UserRequest;
+import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +19,13 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address generateAddress(UserRequest userRequest, User user) {
+    public Address generateAddress(UserRegisterRequest userRegisterRequest, User user) {
         Address address = Address.builder()
                 .idUser(user.getIdUser())
-                .street(userRequest.getStreet())
-                .number(userRequest.getNumber())
-                .province(userRequest.getProvince())
-                .locality(userRequest.getLocality())
+                .street(userRegisterRequest.getStreet())
+                .number(userRegisterRequest.getNumber())
+                .province(userRegisterRequest.getProvince())
+                .locality(userRegisterRequest.getLocality())
                 .build();
         return addressRepository.save(address);
     }

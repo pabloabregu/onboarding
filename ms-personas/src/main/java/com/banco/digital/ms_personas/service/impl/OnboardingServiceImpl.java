@@ -2,7 +2,7 @@ package com.banco.digital.ms_personas.service.impl;
 
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
-import com.banco.digital.ms_personas.request.UserRequest;
+import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.service.AddressService;
 import com.banco.digital.ms_personas.service.KafkaService;
@@ -35,17 +35,17 @@ public class OnboardingServiceImpl implements OnboardingService {
     }
 
     @Override
-    public Response register(UserRequest userRequest) {
+    public Response register(UserRegisterRequest userRegisterRequest) {
         try {
-            Optional<User> user = userService.findByDni(userRequest.getDni());
+            Optional<User> user = userService.findByDni(userRegisterRequest.getDni());
 
             if (user.isEmpty())
-                return handleRegisterNewCustomer(userRequest);
+                return handleRegisterNewCustomer(userRegisterRequest);
 
             String userState = user.get().getState().getDescription();
             return switch (userState) {
                 case State.ACTIVO -> handleAlreadyActiveCustomer();
-                case State.INACTIVO -> handleReactivateCustomer(userRequest);
+                case State.INACTIVO -> handleReactivateCustomer(userRegisterRequest);
                 case State.BLOQUEADO -> handleBlockedCustomer();
                 default -> throw new IllegalStateException("Unexpected value: " + userState);
             };
@@ -55,14 +55,14 @@ public class OnboardingServiceImpl implements OnboardingService {
         }
     }
 
-    private Response handleRegisterNewCustomer(UserRequest userRequest) throws JsonProcessingException {
-        User user = userService.generateUser(userRequest);
-        Address address = addressService.generateAddress(userRequest, user);
+    private Response handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) throws JsonProcessingException {
+        User user = userService.generateUser(userRegisterRequest);
+        Address address = addressService.generateAddress(userRegisterRequest, user);
 
         logger.trace("NEW USER : {}", user);
         logger.trace("NEW ADDRESS : {}", address);
 
-        kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRequest);
+        kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRegisterRequest);
         return new Response("User created!", HttpStatus.CREATED.value());
     }
 
@@ -70,8 +70,8 @@ public class OnboardingServiceImpl implements OnboardingService {
         return new Response("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
     }
 
-    private Response handleReactivateCustomer(UserRequest userRequest) {
-        userService.changeStateFromUser(userRequest, State.ACTIVO);
+    private Response handleReactivateCustomer(UserRegisterRequest userRegisterRequest) {
+        userService.changeStateFromUser(userRegisterRequest, State.ACTIVO);
         return new Response("User ACTIVE!", HttpStatus.CONFLICT.value());
     }
 
