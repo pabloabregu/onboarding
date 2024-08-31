@@ -1,12 +1,12 @@
 package com.banco.digital.ms_cuentas.controller;
 
 import com.banco.digital.ms_cuentas.request.Request;
-import com.banco.digital.ms_cuentas.request.UserAccountEvent;
+import com.banco.digital.ms_cuentas.request.UserAccountRequest;
 import com.banco.digital.ms_cuentas.response.Response;
 import com.banco.digital.ms_cuentas.service.AccountService;
 import com.banco.digital.ms_cuentas.service.AccountStatusService;
 import com.banco.digital.ms_cuentas.service.CurrencyCodeService;
-import com.banco.digital.ms_cuentas.service.UserEventListenerService;
+import com.banco.digital.ms_cuentas.service.AccountEventProcessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +32,7 @@ public class AccountController {
     AccountStatusService accountStatusService;
 
     @Autowired
-    private UserEventListenerService userEventListenerService;
+    private AccountEventProcessorService accountEventProcessorService;
 
     @PostMapping("/validateExternal")
     public ResponseEntity<Response> externalValidation(@RequestBody Request request) throws URISyntaxException, IOException, InterruptedException {
@@ -40,8 +40,8 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity create(@RequestBody UserAccountEvent userAccountEvent) throws URISyntaxException, IOException, InterruptedException {
-        userEventListenerService.processClientEvent(userAccountEvent);
+    public ResponseEntity create(@RequestBody UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
+        accountEventProcessorService.processAccountCreation(userAccountRequest);
         return ResponseEntity.ok("CREATE");
     }
 }

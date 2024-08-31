@@ -3,10 +3,9 @@ package com.banco.digital.ms_cuentas.service.impl;
 import com.banco.digital.ms_cuentas.model.Account;
 import com.banco.digital.ms_cuentas.model.AccountStatus;
 import com.banco.digital.ms_cuentas.model.CurrencyCode;
-import com.banco.digital.ms_cuentas.request.UserAccountEvent;
+import com.banco.digital.ms_cuentas.request.UserAccountRequest;
 import com.banco.digital.ms_cuentas.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserEventListenerServiceImpl implements UserEventListenerService {
+public class AccountEventProcessorServiceImpl implements AccountEventProcessorService {
 
     @Autowired
     private ExternalValidationService externalValidationService;
@@ -35,10 +34,10 @@ public class UserEventListenerServiceImpl implements UserEventListenerService {
     private AccountStatusService accountStatusService;
 
     @Override
-    public void processClientEvent(UserAccountEvent userAccountEvent) throws URISyntaxException, IOException, InterruptedException {
-        if (userAccountEvent.getEvent().equals("new-user")) {
-            String dni = userAccountEvent.getDni();
-            BigDecimal salary = userAccountEvent.getSalary();
+    public void processAccountCreation(UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
+        if (userAccountRequest.getEvent().equals("new-user")) {
+            String dni = userAccountRequest.getDni();
+            BigDecimal salary = userAccountRequest.getSalary();
 
             boolean renaper = externalValidationService.getRenaperResponse(dni).isAuthorize();
             boolean worldSys = externalValidationService.getWorldsysResponse(dni).isTerrorist();
@@ -67,7 +66,7 @@ public class UserEventListenerServiceImpl implements UserEventListenerService {
 
                 Account account = Account.builder()
                         .accountNumber(accountNumber)
-                        .personNumber(userAccountEvent.getPersNum())
+                        .personNumber(userAccountRequest.getPersNum())
                         .currency(currencyCode.get())
                         .status(accountStatus.get())
                         .salary(salary)
