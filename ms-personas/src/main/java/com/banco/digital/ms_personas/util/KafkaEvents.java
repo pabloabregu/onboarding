@@ -5,5 +5,6 @@ public class KafkaEvents {
     private KafkaEvents() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated.");
     }
+
     public static final String CREATE_USER = "new-user";
 }
