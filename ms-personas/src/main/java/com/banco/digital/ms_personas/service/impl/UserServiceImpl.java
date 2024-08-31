@@ -72,4 +72,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return user;
     }
+
+    @Override
+    public void changeStateFromUser(UserRequest userRequest, String activo) {
+
+    }
 }

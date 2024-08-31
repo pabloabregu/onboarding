@@ -10,4 +10,5 @@ public interface UserService extends BaseService<User, Long> {
     Optional<User> findByDni(String dni);
     State validateUser(UserRequest userRequest);
     User generateUser(UserRequest userRequest);
+    void changeStateFromUser(UserRequest userRequest, String activo);
 }
