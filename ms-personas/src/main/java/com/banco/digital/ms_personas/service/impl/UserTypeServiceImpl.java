@@ -30,7 +30,7 @@ public class UserTypeServiceImpl implements UserTypeService {
     }
 
     @Override
-    public UserType findByDescription(String string) {
-        return userTypeRepository.findByDescription(string);
+    public UserType findByDescription(String description) {
+        return userTypeRepository.findByDescription(description);
     }
 }

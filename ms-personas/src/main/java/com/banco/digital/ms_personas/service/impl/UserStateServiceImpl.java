@@ -25,12 +25,12 @@ public class UserStateServiceImpl implements UserStateService {
     }
 
     @Override
-    public Optional<UserState> findById(Long id) {
+    public Optional<UserState> findById(Integer id) {
         return userStateRepository.findById(id);
     }
 
     @Override
-    public UserState findByDescription(String string) {
-        return userStateRepository.findByDescription(string);
+    public UserState findByDescription(String description) {
+        return userStateRepository.findByDescription(description);
     }
 }

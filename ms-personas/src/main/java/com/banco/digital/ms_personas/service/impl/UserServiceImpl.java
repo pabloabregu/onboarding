@@ -10,6 +10,8 @@ import com.banco.digital.ms_personas.repository.UserStateRepository;
 import com.banco.digital.ms_personas.repository.UserTypeRepository;
 import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.service.UserService;
+import com.banco.digital.ms_personas.service.UserStateService;
+import com.banco.digital.ms_personas.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +22,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    private final UserStateRepository userStateRepository;
+    private final UserStateService userStateService;
 
-    private final UserTypeRepository userTypeRepository;
+    private final UserTypeService userTypeService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserStateRepository userStateRepository, UserTypeRepository userTypeRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserStateService userStateService, UserTypeService userTypeService) {
         this.userRepository = userRepository;
-        this.userStateRepository = userStateRepository;
-        this.userTypeRepository = userTypeRepository;
+        this.userStateService = userStateService;
+        this.userTypeService = userTypeService;
     }
 
     @Override
@@ -60,8 +62,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User generateUser(UserRegisterRequest userRegisterRequest) {
-        UserState userState = userStateRepository.findByDescription(State.ACTIVO.name());
-        UserType userType = userTypeRepository.findByDescription(Type.CLIENTE.name());
+        UserState userState = userStateService.findByDescription(State.ACTIVO.name());
+        UserType userType = userTypeService.findByDescription(Type.CLIENTE.name());
         User user = User.builder()
                 .firstname(userRegisterRequest.getFirstname())
                 .lastname(userRegisterRequest.getLastname())
