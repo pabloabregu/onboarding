@@ -12,8 +12,17 @@ public class KafkaTopicConfig {
     @Value("${kafka-topic.alta-usuario}")
     private String nameTopic;
 
+    @Value("${kafka-topic.alta-usuario.partitions}")
+    private int partitions;
+
+    @Value("${kafka-topic.alta-usuario.replicas}")
+    private int replicas;
+
+
     @Bean
     public NewTopic generateTopic() {
-        return TopicBuilder.name(nameTopic).partitions(1).replicas(1).build();
+        return TopicBuilder.name(nameTopic)
+                .partitions(partitions)
+                .replicas(replicas).build();
     }
 }
