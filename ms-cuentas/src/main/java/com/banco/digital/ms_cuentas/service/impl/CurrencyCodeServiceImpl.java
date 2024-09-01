@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class CurrencyCodeServiceImpl implements CurrencyCodeService {
 
+    private final CurrencyCodeRepository currencyCodeRepository;
+
     @Autowired
-    private CurrencyCodeRepository currencyCodeRepository;
+    public CurrencyCodeServiceImpl(CurrencyCodeRepository currencyCodeRepository) {
+        this.currencyCodeRepository = currencyCodeRepository;
+    }
 
     @Override
     public List<CurrencyCode> findAll() {
@@ -21,7 +25,12 @@ public class CurrencyCodeServiceImpl implements CurrencyCodeService {
     }
 
     @Override
-    public Optional<CurrencyCode> findById(Long id) {
+    public Optional<CurrencyCode> findById(Integer id) {
         return currencyCodeRepository.findById(id);
+    }
+
+    @Override
+    public CurrencyCode findBySymbol(String symbol) {
+        return currencyCodeRepository.findBySymbol(symbol);
     }
 }

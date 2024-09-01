@@ -13,7 +13,7 @@ public class AccountStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "detalle", nullable = false)
     private String detail;

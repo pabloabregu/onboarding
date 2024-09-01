@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class AccountStatusServiceImpl implements AccountStatusService {
 
+    private final AccountStatusRepository accountStatusRepository;
+
     @Autowired
-    private AccountStatusRepository accountStatusRepository;
+    public AccountStatusServiceImpl(AccountStatusRepository accountStatusRepository) {
+        this.accountStatusRepository = accountStatusRepository;
+    }
 
     @Override
     public List<AccountStatus> findAll() {
@@ -21,7 +25,12 @@ public class AccountStatusServiceImpl implements AccountStatusService {
     }
 
     @Override
-    public Optional<AccountStatus> findById(Long id) {
+    public Optional<AccountStatus> findById(Integer id) {
         return accountStatusRepository.findById(id);
+    }
+
+    @Override
+    public AccountStatus findByDetail(String detail) {
+        return accountStatusRepository.findByDetail(detail);
     }
 }

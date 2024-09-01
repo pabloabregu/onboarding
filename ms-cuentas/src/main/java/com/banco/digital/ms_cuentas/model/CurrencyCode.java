@@ -13,7 +13,7 @@ public class CurrencyCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cod_moneda", nullable = false)
-    private Long currencyCode;
+    private Integer currencyCode;
 
     @Column(name = "pais", nullable = false)
     private String country;
