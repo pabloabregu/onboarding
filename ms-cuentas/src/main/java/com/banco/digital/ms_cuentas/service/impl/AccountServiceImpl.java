@@ -4,15 +4,11 @@ import com.banco.digital.ms_cuentas.model.Account;
 import com.banco.digital.ms_cuentas.model.AccountStatus;
 import com.banco.digital.ms_cuentas.model.CurrencyCode;
 import com.banco.digital.ms_cuentas.repository.AccountRepository;
-import com.banco.digital.ms_cuentas.response.Response;
 import com.banco.digital.ms_cuentas.service.AccountService;
-import com.banco.digital.ms_cuentas.service.ExternalValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
@@ -51,10 +47,8 @@ public class AccountServiceImpl implements AccountService {
         StringBuilder accountNumber = new StringBuilder();
         do {
             SecureRandom secureRandom = new SecureRandom();
-
             // Generar el primer dígito como un número no cero
             accountNumber.append(secureRandom.nextInt(9) + 1);
-
             // Generar el resto de los dígitos
             for (int i = 1; i < 10; i++) {
                 accountNumber.append(secureRandom.nextInt(10));
