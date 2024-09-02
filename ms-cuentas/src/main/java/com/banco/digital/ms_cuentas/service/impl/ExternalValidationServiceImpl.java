@@ -6,6 +6,8 @@ import com.banco.digital.ms_cuentas.response.*;
 import com.banco.digital.ms_cuentas.service.ExternalValidationService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class ExternalValidationServiceImpl implements ExternalValidationService {
+    private final Logger logger = LoggerFactory.getLogger(ExternalValidationServiceImpl.class);
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final Gson gson = new Gson();
 
@@ -45,7 +48,7 @@ public class ExternalValidationServiceImpl implements ExternalValidationService 
             ApiResponse<RenaperResponse> apiResponse = gson.fromJson(response.body(), renaperResponseType);
 
             if (apiResponse.getResponse() != null && !apiResponse.getResponse().isEmpty()) {
-                System.out.println("Renaper : " + apiResponse.getResponse().toString());
+                logger.info("Renaper : {}", apiResponse.getResponse());
 
                 return apiResponse.getResponse().get(0);
             }
@@ -68,7 +71,7 @@ public class ExternalValidationServiceImpl implements ExternalValidationService 
             ApiResponse<WorldsysResponse> apiResponse = gson.fromJson(response.body(), worldsysResponseType);
 
             if (apiResponse.getResponse() != null && !apiResponse.getResponse().isEmpty()) {
-                System.out.println("Worldsys : " + apiResponse.getResponse().toString());
+                logger.info("Worldsys : {}", apiResponse.getResponse());
 
                 return apiResponse.getResponse().get(0);
             }
@@ -90,7 +93,7 @@ public class ExternalValidationServiceImpl implements ExternalValidationService 
             ApiResponse<VerazResponse> apiResponse = gson.fromJson(response.body(), verazResponseType);
 
             if (apiResponse.getResponse() != null && !apiResponse.getResponse().isEmpty()) {
-                System.out.println("Veraz : " + apiResponse.getResponse().toString());
+                logger.info("Veraz : {}", apiResponse.getResponse());
 
                 return apiResponse.getResponse().get(0);
             }
