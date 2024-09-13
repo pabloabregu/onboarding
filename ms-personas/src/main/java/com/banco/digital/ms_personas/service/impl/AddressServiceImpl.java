@@ -8,6 +8,9 @@ import com.banco.digital.ms_personas.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class AddressServiceImpl implements AddressService {
 
@@ -28,5 +31,15 @@ public class AddressServiceImpl implements AddressService {
                 .locality(userRegisterRequest.getLocality())
                 .build();
         return addressRepository.save(address);
+    }
+
+    @Override
+    public List<Address> findAll() {
+        return null;
+    }
+
+    @Override
+    public Optional<Address> findById(Long id) {
+        return Optional.empty();
     }
 }
