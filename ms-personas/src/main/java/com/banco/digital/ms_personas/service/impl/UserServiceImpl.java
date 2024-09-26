@@ -6,8 +6,6 @@ import com.banco.digital.ms_personas.model.User;
 import com.banco.digital.ms_personas.model.UserState;
 import com.banco.digital.ms_personas.model.UserType;
 import com.banco.digital.ms_personas.repository.UserRepository;
-import com.banco.digital.ms_personas.repository.UserStateRepository;
-import com.banco.digital.ms_personas.repository.UserTypeRepository;
 import com.banco.digital.ms_personas.request.UserRegisterRequest;
 import com.banco.digital.ms_personas.service.UserService;
 import com.banco.digital.ms_personas.service.UserStateService;

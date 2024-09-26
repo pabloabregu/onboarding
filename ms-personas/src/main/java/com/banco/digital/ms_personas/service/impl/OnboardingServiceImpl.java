@@ -36,38 +36,49 @@ public class OnboardingServiceImpl implements OnboardingService {
 
     @Override
     public Response register(UserRegisterRequest userRegisterRequest) {
+        if (userRegisterRequest == null || userRegisterRequest.getDni() == null) {
+            return new Response("Invalid request data.", HttpStatus.BAD_REQUEST.value());
+        }
+
+        Optional<User> userOptional = userService.findByDni(userRegisterRequest.getDni());
+
+        if (userOptional.isEmpty())
+            return handleRegisterNewCustomer(userRegisterRequest);
+
+        User user = userOptional.get();
+        String userState = user.getState().getDescription();
+        return switch (userState) {
+            case State.ACTIVO -> handleAlreadyActiveCustomer(userRegisterRequest);
+            case State.INACTIVO -> handleReactivateCustomer(userRegisterRequest);
+            case State.BLOQUEADO -> handleBlockedCustomer(userRegisterRequest);
+            default -> throw new IllegalStateException("Unexpected value: " + userState);
+        };
+    }
+
+    private Response handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) {
+        logger.info("Generar nuevo usuario...");
+
         try {
-            Optional<User> user = userService.findByDni(userRegisterRequest.getDni());
+            User user = userService.generateUser(userRegisterRequest);
+            Address address = addressService.generateAddress(userRegisterRequest, user);
 
-            if (user.isEmpty())
-                return handleRegisterNewCustomer(userRegisterRequest);
+            if (user == null || address == null) {
+                logger.error("Failed to create {}.", user == null ? "user" : "address");
+                return new Response("Error creating user or address.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            }
+            logger.info("New user and address created: User={}, Address={}", user, address);
 
-            String userState = user.get().getState().getDescription();
-            return switch (userState) {
-                case State.ACTIVO -> handleAlreadyActiveCustomer(userRegisterRequest);
-                case State.INACTIVO -> handleReactivateCustomer(userRegisterRequest);
-                case State.BLOQUEADO -> handleBlockedCustomer(userRegisterRequest);
-                default -> throw new IllegalStateException("Unexpected value: " + userState);
-            };
-        } catch (JsonProcessingException ex) {
-            logger.error("JSON Processing Error: {}", ex.getMessage());
-            return new Response("Error : JSON Processing", HttpStatus.PROCESSING.value());
+            sendCreateUserEvent(user, userRegisterRequest);
+            return new Response("User created!", HttpStatus.CREATED.value());
+        } catch (JsonProcessingException e) {
+            logger.error("Error sending Kafka event for new user: {}", e.getMessage());
+            return new Response("Error sending event.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
-    private Response handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) throws JsonProcessingException {
-        logger.info("Generar nuevo usuario...");
-
-        User user = userService.generateUser(userRegisterRequest);
-        Address address = addressService.generateAddress(userRegisterRequest, user);
-
-        logger.info("New user : {}", user);
-        logger.info("New address : {}", address);
-
+    private void sendCreateUserEvent(User user, UserRegisterRequest userRegisterRequest) throws JsonProcessingException {
         kafkaService.sendEvent(KafkaEvents.CREATE_USER, user, userRegisterRequest);
         logger.info("Evento enviado para nuevo usuario...");
-
-        return new Response("User created!", HttpStatus.CREATED.value());
     }
 
     private Response handleAlreadyActiveCustomer(UserRegisterRequest userRegisterRequest) {
@@ -78,7 +89,7 @@ public class OnboardingServiceImpl implements OnboardingService {
     private Response handleReactivateCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Usuario inactivo con DNI : {}", userRegisterRequest.getDni());
         userService.changeStateFromUser(userRegisterRequest, State.ACTIVO);
-        return new Response("User ACTIVE.", HttpStatus.CONFLICT.value());
+        return new Response("User reactivated.", HttpStatus.CONFLICT.value());
     }
 
     private Response handleBlockedCustomer(UserRegisterRequest userRegisterRequest) {
