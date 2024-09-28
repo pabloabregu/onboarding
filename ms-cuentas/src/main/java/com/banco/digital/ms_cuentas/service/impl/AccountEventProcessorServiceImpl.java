@@ -19,20 +19,20 @@ import java.net.URISyntaxException;
 public class AccountEventProcessorServiceImpl implements AccountEventProcessorService {
     private final Logger logger = LoggerFactory.getLogger(AccountEventProcessorServiceImpl.class);
 
-    @Autowired
-    private ExternalValidationService externalValidationService;
+    private final AccountService accountService;
+    private final CurrencyCodeService currencyCodeService;
+    private final AccountStatusService accountStatusService;
+    private final ExternalValidationService externalValidationService;
 
     @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private CurrencyCodeService currencyCodeService;
-
-    @Autowired
-    private AccountStatusService accountStatusService;
+    public AccountEventProcessorServiceImpl(AccountService accountService, CurrencyCodeService currencyCodeService,
+                                            AccountStatusService accountStatusService,
+                                            ExternalValidationService externalValidationService) {
+        this.accountService = accountService;
+        this.currencyCodeService = currencyCodeService;
+        this.accountStatusService = accountStatusService;
+        this.externalValidationService = externalValidationService;
+    }
 
     @Override
     public void processAccountCreation(UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
@@ -45,13 +45,14 @@ public class AccountEventProcessorServiceImpl implements AccountEventProcessorSe
         ExternalValidationResult externalValidationResult = externalValidationService.getValidationResults(dni);
         logger.info("External validation to DNI {} : {}", dni, externalValidationResult.toString());
 
+        // select product
+
         CurrencyCode currencyCode = currencyCodeService.findBySymbol("USD");
         AccountStatus accountStatus = accountStatusService.findByDetail("Activo");
 
         Account account = accountService.generateAccount(persNum, currencyCode, accountStatus, salary);
+        logger.info("Creat account : {}", account);
 
-        //String product = productService.generateProduct(renaper, worldSys, veraz, salary);
-        //List<String> productos = determinarProductos(renaper, worldSys, veraz, sueldoBruto);
-        //productos.forEach(producto -> kafkaTemplate.send("productoEventos", new ProductoEvento(evento.getId(), producto)));
+        // Send event
     }
 }
