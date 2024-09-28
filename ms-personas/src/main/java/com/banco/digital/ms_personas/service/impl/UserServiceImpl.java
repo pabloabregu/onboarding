@@ -47,18 +47,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public State validateUser(UserRegisterRequest userRegisterRequest) {
-        return findByDni(userRegisterRequest.getDni())
-                .map(user -> switch (user.getState().getDescription().toUpperCase()) {
-                    case "ACTIVO" -> State.ACTIVO;
-                    case "INACTIVO" -> State.INACTIVO;
-                    case "BLOQUEADO" -> State.BLOQUEADO;
-                    default -> State.NO_EXISTE;
-                })
-                .orElse(State.NO_EXISTE);
-    }
-
-    @Override
     public User generateUser(UserRegisterRequest userRegisterRequest) {
         UserState userState = userStateService.findByDescription(State.ACTIVO.name());
         UserType userType = userTypeService.findByDescription(Type.CLIENTE.name());
@@ -73,8 +61,4 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public void changeStateFromUser(UserRegisterRequest userRegisterRequest, String activo) {
-
-    }
 }

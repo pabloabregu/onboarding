@@ -35,11 +35,11 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<Address> findAll() {
-        return null;
+        return addressRepository.findAll();
     }
 
     @Override
     public Optional<Address> findById(Long id) {
-        return Optional.empty();
+        return addressRepository.findById(id);
     }
 }
