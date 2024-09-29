@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Card {
     @Id
     @Column(name = "numtarj", length = 30, nullable = false)
-    private Integer cardNumber;
+    private String cardNumber;
 
     @Column(name = "numcue", nullable = false)
     private Integer accountNumber;
