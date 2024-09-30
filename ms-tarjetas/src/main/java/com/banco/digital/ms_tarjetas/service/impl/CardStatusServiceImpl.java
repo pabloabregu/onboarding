@@ -28,4 +28,9 @@ public class CardStatusServiceImpl implements CardStatusService {
     public Optional<CardStatus> findById(Integer id) {
         return cardStatusRepository.findById(id);
     }
+
+    @Override
+    public Optional<CardStatus> findByDetail(String detail) {
+        return cardStatusRepository.findByDetail(detail);
+    }
 }

@@ -28,4 +28,9 @@ public class CardServiceImpl implements CardService {
     public Optional<Card> findById(String id) {
         return Optional.empty();
     }
+
+    @Override
+    public void save(Card card) {
+        cardRepository.save(card);
+    }
 }
