@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface UserService extends BaseService<User, Long> {
     Optional<User> findByDni(String dni);
     User generateUser(UserRegisterRequest userRegisterRequest);
+
+    void changeStateFromUser(UserRegisterRequest userRegisterRequest, String activo);
 }
