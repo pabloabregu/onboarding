@@ -9,13 +9,13 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 
-    @Value("${kafka-topic.alta-usuario}")
+    @Value("${kafka-topic.nueva-cuenta}")
     private String nameTopic;
 
-    @Value("${kafka-topic.alta-usuario.partitions}")
+    @Value("${kafka-topic.nueva-cuenta.partitions}")
     private int partitions;
 
-    @Value("${kafka-topic.alta-usuario.replicas}")
+    @Value("${kafka-topic.nueva-cuenta.replicas}")
     private int replicas;
 
 
