@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterCardResponse extends Response {
+    public RegisterCardResponse(String message, Integer httpStatusCode) {
+        super(message, httpStatusCode);
+    }
 }
