@@ -25,7 +25,7 @@ public class CardController {
     @PostMapping("/issue")
     public ResponseEntity<String> issueCard(@Valid @RequestBody IssueCardRequest request) {
         try {
-            Card card = cardEventProcessorService.processCardIssue(request);
+            Card card = cardEventProcessorService.processCardCreation(request);
             return new ResponseEntity<>("Card issued successfully! " + card.toString(), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while issuing the card", HttpStatus.INTERNAL_SERVER_ERROR);

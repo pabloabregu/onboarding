@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CardEventProcessorService {
-    Card processCardIssue(IssueCardRequest request);
+    Card processCardCreation(IssueCardRequest request);
 }
