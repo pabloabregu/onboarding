@@ -20,7 +20,7 @@ public class KafkaService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Value("${kafka-topic.alta-usuario}")
+    @Value("${kafka-topic.nuevo-usuario}")
     private String nameKafkaTopic;
 
     public void sendEvent(String nameKafkaEvent, User user, UserRegisterRequest userRegisterRequest) throws JsonProcessingException {
