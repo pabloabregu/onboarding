@@ -61,4 +61,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public void changeStateFromUser(UserRegisterRequest userRegisterRequest, String activo) {
+
+    }
+
 }

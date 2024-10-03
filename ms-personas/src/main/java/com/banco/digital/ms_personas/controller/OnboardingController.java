@@ -1,7 +1,7 @@
 package com.banco.digital.ms_personas.controller;
 
 import com.banco.digital.ms_personas.request.UserRegisterRequest;
-import com.banco.digital.ms_personas.response.Response;
+import com.banco.digital.ms_personas.response.RegisterUserResponse;
 import com.banco.digital.ms_personas.service.OnboardingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class OnboardingController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Response> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        Response response = onboardingService.register(userRegisterRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<RegisterUserResponse> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        RegisterUserResponse response = onboardingService.registerUser(userRegisterRequest);
+        return ResponseEntity.status(response.getHttpStatusCode()).body(response);
     }
 }

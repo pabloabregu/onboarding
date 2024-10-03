@@ -3,6 +3,7 @@ package com.banco.digital.ms_personas.service.impl;
 import com.banco.digital.ms_personas.model.Address;
 import com.banco.digital.ms_personas.model.User;
 import com.banco.digital.ms_personas.request.UserRegisterRequest;
+import com.banco.digital.ms_personas.response.RegisterUserResponse;
 import com.banco.digital.ms_personas.response.Response;
 import com.banco.digital.ms_personas.service.AddressService;
 import com.banco.digital.ms_personas.service.KafkaService;
@@ -35,9 +36,9 @@ public class OnboardingServiceImpl implements OnboardingService {
     }
 
     @Override
-    public Response register(UserRegisterRequest userRegisterRequest) {
+    public RegisterUserResponse registerUser(UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null || userRegisterRequest.getDni() == null) {
-            return new Response("Invalid request data.", HttpStatus.BAD_REQUEST.value());
+            return new RegisterUserResponse("Invalid request data.", HttpStatus.BAD_REQUEST.value());
         }
 
         Optional<User> userOptional = userService.findByDni(userRegisterRequest.getDni());
@@ -55,7 +56,7 @@ public class OnboardingServiceImpl implements OnboardingService {
         };
     }
 
-    private Response handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) {
+    private RegisterUserResponse handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Generar nuevo usuario...");
 
         try {
@@ -64,15 +65,15 @@ public class OnboardingServiceImpl implements OnboardingService {
 
             if (user == null || address == null) {
                 logger.error("Failed to create {}.", user == null ? "user" : "address");
-                return new Response("Error creating user or address.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+                return new RegisterUserResponse("Error creating user or address.", HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
             logger.info("New user and address created: User={}, Address={}", user, address);
 
             sendCreateUserEvent(user, userRegisterRequest);
-            return new Response("User created!", HttpStatus.CREATED.value());
+            return new RegisterUserResponse("User created!", HttpStatus.CREATED.value());
         } catch (JsonProcessingException e) {
             logger.error("Error sending Kafka event for new user: {}", e.getMessage());
-            return new Response("Error sending event.", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return new RegisterUserResponse("Error sending event.", HttpStatus.INTERNAL_SERVER_ERROR.value());
         }
     }
 
@@ -81,19 +82,19 @@ public class OnboardingServiceImpl implements OnboardingService {
         logger.info("Evento enviado para nuevo usuario...");
     }
 
-    private Response handleAlreadyActiveCustomer(UserRegisterRequest userRegisterRequest) {
+    private RegisterUserResponse handleAlreadyActiveCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Usuario ya registrado con el DNI : {}", userRegisterRequest.getDni());
-        return new Response("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
+        return new RegisterUserResponse("There is an active user with the same DNI.", HttpStatus.CONFLICT.value());
     }
 
-    private Response handleReactivateCustomer(UserRegisterRequest userRegisterRequest) {
+    private RegisterUserResponse handleReactivateCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Usuario inactivo con DNI : {}", userRegisterRequest.getDni());
         userService.changeStateFromUser(userRegisterRequest, State.ACTIVO);
-        return new Response("User reactivated.", HttpStatus.CONFLICT.value());
+        return new RegisterUserResponse("User reactivated.", HttpStatus.CONFLICT.value());
     }
 
-    private Response handleBlockedCustomer(UserRegisterRequest userRegisterRequest) {
+    private RegisterUserResponse handleBlockedCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Usuario con el DNI {} está bloqueado", userRegisterRequest.getDni());
-        return new Response("The user is blocked.", HttpStatus.FORBIDDEN.value());
+        return new RegisterUserResponse("The user is blocked.", HttpStatus.FORBIDDEN.value());
     }
 }
