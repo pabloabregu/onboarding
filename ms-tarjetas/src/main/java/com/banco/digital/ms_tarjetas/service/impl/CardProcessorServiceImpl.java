@@ -3,7 +3,7 @@ package com.banco.digital.ms_tarjetas.service.impl;
 import com.banco.digital.ms_tarjetas.model.Card;
 import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
 import com.banco.digital.ms_tarjetas.response.RegisterCardResponse;
-import com.banco.digital.ms_tarjetas.service.CardEventProcessorService;
+import com.banco.digital.ms_tarjetas.service.CardProcessorService;
 import com.banco.digital.ms_tarjetas.service.CardGeneratorService;
 import com.banco.digital.ms_tarjetas.service.CardService;
 import org.slf4j.Logger;
@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CardEventProcessorServiceImpl implements CardEventProcessorService {
-    private final Logger logger = LoggerFactory.getLogger(CardEventProcessorServiceImpl.class);
+public class CardProcessorServiceImpl implements CardProcessorService {
+    private final Logger logger = LoggerFactory.getLogger(CardProcessorServiceImpl.class);
     private final CardService cardService;
     private final CardGeneratorService cardGeneratorService;
 
     @Autowired
-    public CardEventProcessorServiceImpl(CardService cardService, CardGeneratorService cardGeneratorService) {
+    public CardProcessorServiceImpl(CardService cardService, CardGeneratorService cardGeneratorService) {
         this.cardService = cardService;
         this.cardGeneratorService = cardGeneratorService;
     }
