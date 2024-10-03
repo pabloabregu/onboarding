@@ -21,7 +21,7 @@ public class CardCreationListener {
         this.cardEventProcessorService = cardEventProcessorService;
     }
 
-    @KafkaListener(topics = "${kafka-topic.alta-cuenta}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${kafka-topic.nueva-cuenta}", groupId = "${spring.kafka.consumer.group-id}")
     public void cardCreation(String request) throws JsonProcessingException {
         logger.info("Listener: card creation...");
         RegisterCardRequest registerCardRequest = new ObjectMapper().readValue(request, RegisterCardRequest.class);

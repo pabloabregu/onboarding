@@ -26,7 +26,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Optional<Card> findById(String id) {
-        return Optional.empty();
+        return cardRepository.findById(id);
     }
 
     @Override
