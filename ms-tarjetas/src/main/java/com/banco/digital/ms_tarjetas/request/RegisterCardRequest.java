@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class IssueCardRequest {
+public class RegisterCardRequest {
     private Integer accountNumber;
+    private String typeCard;
 }
