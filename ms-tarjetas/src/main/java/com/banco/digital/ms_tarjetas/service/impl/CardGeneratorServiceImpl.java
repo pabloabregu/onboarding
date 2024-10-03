@@ -1,15 +1,13 @@
 package com.banco.digital.ms_tarjetas.service.impl;
 
 import com.banco.digital.ms_tarjetas.enums.CardStatusEnum;
-import com.banco.digital.ms_tarjetas.enums.TypeCard;
+import com.banco.digital.ms_tarjetas.enums.TypeCardEnum;
 import com.banco.digital.ms_tarjetas.model.Card;
 import com.banco.digital.ms_tarjetas.model.CardStatus;
 import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
 import com.banco.digital.ms_tarjetas.service.CardGeneratorService;
 import com.banco.digital.ms_tarjetas.service.CardService;
 import com.banco.digital.ms_tarjetas.service.CardStatusService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +38,7 @@ public class CardGeneratorServiceImpl implements CardGeneratorService {
                 .pin(generatePin())
                 .cardStatus(generateStatus())
                 .issueDate(generateIssueDate())
-                .type(TypeCard.CREDIT.getType()).build();
+                .type(TypeCardEnum.CREDIT.getType()).build();
     }
 
     @Override

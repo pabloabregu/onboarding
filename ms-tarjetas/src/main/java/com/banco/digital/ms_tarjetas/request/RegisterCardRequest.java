@@ -1,6 +1,5 @@
 package com.banco.digital.ms_tarjetas.request;
 
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
