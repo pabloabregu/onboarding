@@ -25,7 +25,7 @@ public class AccountCreationListener {
 
     @KafkaListener(topics = "${kafka-topic.nuevo-usuario}", groupId = "${spring.kafka.consumer.group-id}")
     public void accountCreation(String request) throws IOException, URISyntaxException, InterruptedException {
-        logger.info("Account creation...");
+        logger.info("Listener: creacion de cuentas...");
         UserAccountRequest userAccountRequest = new ObjectMapper().readValue(request, UserAccountRequest.class);
         accountProcessorService.processAccountCreation(userAccountRequest);
     }

@@ -53,6 +53,7 @@ public class AccountProcessorServiceImpl implements AccountProcessorService {
         ExternalValidationResult externalValidationResult = externalValidationService.getValidationResults(dni);
 
         logger.info("Validando tipo producto...");
+
         Product product = productService.generateProduct(externalValidationResult, salary);
         logger.info("Validando tipo producto {}", product.toString());
 
@@ -61,6 +62,7 @@ public class AccountProcessorServiceImpl implements AccountProcessorService {
 
         Account account = accountService.generateAccount(persNum, currencyCode, accountStatus, salary);
 
+        logger.info("Cuenta creada...");
         sendCreateUserEvent(account);
 
         return new RegisterAccountResponse("Account registered successfully!", HttpStatus.CREATED.value());

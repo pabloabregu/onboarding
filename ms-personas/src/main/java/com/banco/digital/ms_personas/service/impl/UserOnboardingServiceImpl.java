@@ -35,6 +35,7 @@ public class UserOnboardingServiceImpl implements UserOnboardingService {
 
     @Override
     public RegisterUserResponse registerUser(UserRegisterRequest userRegisterRequest) {
+        logger.info("Onboarding de usuario...");
         Optional<User> userOptional = userService.findByDni(userRegisterRequest.getDni());
 
         if (userOptional.isEmpty())
@@ -54,7 +55,7 @@ public class UserOnboardingServiceImpl implements UserOnboardingService {
     }
 
     private RegisterUserResponse handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) {
-        logger.info("Generar nuevo usuario...");
+        logger.info("Generar nuevo usuario con el DNI : {}", userRegisterRequest.getDni());
 
         try {
             User user = userService.generateUser(userRegisterRequest);
@@ -64,6 +65,7 @@ public class UserOnboardingServiceImpl implements UserOnboardingService {
                 return new RegisterUserResponse("Error creating user or address.", HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
 
+            logger.info("Usuario creado...");
             sendCreateUserEvent(user, userRegisterRequest);
 
             return new RegisterUserResponse("User registered successfully!", HttpStatus.CREATED.value());
