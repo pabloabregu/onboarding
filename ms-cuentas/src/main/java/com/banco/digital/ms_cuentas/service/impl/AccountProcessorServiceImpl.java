@@ -46,7 +46,7 @@ public class AccountProcessorServiceImpl implements AccountProcessorService {
     public RegisterAccountResponse processAccountCreation(UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
         logger.info("Generar cuentas...");
         String dni = userAccountRequest.getDni();
-        Long persNum = userAccountRequest.getPersNum();
+        Integer persNum = userAccountRequest.getPersNum();
         BigDecimal salary = userAccountRequest.getSalary();
 
         logger.info("Validación externa de dni {} ...", dni);
@@ -70,7 +70,7 @@ public class AccountProcessorServiceImpl implements AccountProcessorService {
 
     private void sendCreateUserEvent(Account account) throws JsonProcessingException {
         UserCardRequest userCardRequest = UserCardRequest.builder()
-                .accountNumber(Integer.valueOf(account.getAccountNumber())).build();
+                .accountNumber(account.getAccountNumber()).build();
         kafkaService.sendEvent(userCardRequest);
     }
 }

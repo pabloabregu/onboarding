@@ -5,7 +5,7 @@ import com.banco.digital.ms_personas.request.UserRegisterRequest;
 
 import java.util.Optional;
 
-public interface UserService extends BaseService<User, Long> {
+public interface UserService extends BaseService<User, Integer> {
     Optional<User> findByDni(String dni);
 
     User generateUser(UserRegisterRequest userRegisterRequest);

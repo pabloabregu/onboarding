@@ -1,6 +1,6 @@
 package com.banco.digital.ms_tarjetas.controller;
 
-import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
+import com.banco.digital.ms_tarjetas.request.UserCardRequest;
 import com.banco.digital.ms_tarjetas.response.RegisterCardResponse;
 import com.banco.digital.ms_tarjetas.service.CardProcessorService;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class CardController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterCardResponse> registerCard(@Valid @RequestBody RegisterCardRequest request) {
+    public ResponseEntity<RegisterCardResponse> registerCard(@Valid @RequestBody UserCardRequest request) {
         RegisterCardResponse response = cardProcessorService.processCardCreation(request);
         return ResponseEntity.status(response.getHttpStatusCode()).body(response);
     }

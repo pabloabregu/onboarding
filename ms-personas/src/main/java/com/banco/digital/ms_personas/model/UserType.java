@@ -13,7 +13,7 @@ public class UserType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idtipo_usuario")
-    private Long idType;
+    private Integer idType;
 
     @Column(name = "descripcion")
     private String description;

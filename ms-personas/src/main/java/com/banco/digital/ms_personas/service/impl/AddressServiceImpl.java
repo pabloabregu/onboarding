@@ -39,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Optional<Address> findById(Long id) {
+    public Optional<Address> findById(Integer id) {
         return addressRepository.findById(id);
     }
 }

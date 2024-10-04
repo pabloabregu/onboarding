@@ -4,7 +4,7 @@ import com.banco.digital.ms_tarjetas.enums.CardStatusEnum;
 import com.banco.digital.ms_tarjetas.enums.TypeCardEnum;
 import com.banco.digital.ms_tarjetas.model.Card;
 import com.banco.digital.ms_tarjetas.model.CardStatus;
-import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
+import com.banco.digital.ms_tarjetas.request.UserCardRequest;
 import com.banco.digital.ms_tarjetas.service.CardGeneratorService;
 import com.banco.digital.ms_tarjetas.service.CardService;
 import com.banco.digital.ms_tarjetas.service.CardStatusService;
@@ -30,10 +30,10 @@ public class CardGeneratorServiceImpl implements CardGeneratorService {
     }
 
     @Override
-    public Card generateCreditCard(RegisterCardRequest registerCardRequest) {
+    public Card generateCreditCard(UserCardRequest userCardRequest) {
         return Card.builder()
                 .cardNumber(generateCardNumber())
-                .accountNumber(registerCardRequest.getAccountNumber())
+                .accountNumber(userCardRequest.getAccountNumber())
                 .expirationDate(generateExpirationDate())
                 .pin(generatePin())
                 .cardStatus(generateStatus())
@@ -44,12 +44,11 @@ public class CardGeneratorServiceImpl implements CardGeneratorService {
     @Override
     public String generateCardNumber() {
         StringBuilder cardNumber = new StringBuilder();
-        do {
-            for (int i = 0; i < 16; i++) {
-                int digit = random.nextInt(10);
-                cardNumber.append(digit);
-            }
-        } while (cardService.findById(cardNumber.toString()).isEmpty());
+
+        for (int i = 0; i < 16; i++) {
+            int digit = random.nextInt(10);
+            cardNumber.append(digit);
+        }
         return cardNumber.toString();
     }
 

@@ -17,7 +17,7 @@ public class Account {
     private String accountNumber;
 
     @Column(name = "persnum", nullable = false)
-    private Long personNumber;
+    private Integer personNumber;
 
     @ManyToOne
     @JoinColumn(name = "divisa")

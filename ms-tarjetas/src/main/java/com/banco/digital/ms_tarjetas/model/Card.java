@@ -18,7 +18,7 @@ public class Card {
     private String cardNumber;
 
     @Column(name = "numcue", nullable = false)
-    private Integer accountNumber;
+    private String accountNumber;
 
     @Column(name = "f_vencimiento", length = 10, nullable = false)
     private String expirationDate;

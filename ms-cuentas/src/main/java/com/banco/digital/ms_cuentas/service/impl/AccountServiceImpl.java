@@ -28,7 +28,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> findById(Long id) {
+    public Optional<Account> findById(Integer id) {
         return accountRepository.findById(id);
     }
 
@@ -58,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account generateAccount(Long persNum, CurrencyCode currencyCode, AccountStatus accountStatus, BigDecimal salary) {
+    public Account generateAccount(Integer persNum, CurrencyCode currencyCode, AccountStatus accountStatus, BigDecimal salary) {
         String accountNumber = generateAccountNumber();
 
         Account account = Account.builder()

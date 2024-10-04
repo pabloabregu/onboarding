@@ -1,7 +1,7 @@
 package com.banco.digital.ms_tarjetas.service.impl;
 
 import com.banco.digital.ms_tarjetas.model.Card;
-import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
+import com.banco.digital.ms_tarjetas.request.UserCardRequest;
 import com.banco.digital.ms_tarjetas.response.RegisterCardResponse;
 import com.banco.digital.ms_tarjetas.service.CardProcessorService;
 import com.banco.digital.ms_tarjetas.service.CardGeneratorService;
@@ -25,10 +25,10 @@ public class CardProcessorServiceImpl implements CardProcessorService {
     }
 
     @Override
-    public RegisterCardResponse processCardCreation(RegisterCardRequest registerCardRequest) {
+    public RegisterCardResponse processCardCreation(UserCardRequest userCardRequest) {
         logger.info("Generar tarjeta...");
 
-        Card card = cardGeneratorService.generateCreditCard(registerCardRequest);
+        Card card = cardGeneratorService.generateCreditCard(userCardRequest);
         cardService.save(card);
 
         logger.info("Tarjeta creada...{}", card);

@@ -25,7 +25,7 @@ public class UserTypeServiceImpl implements UserTypeService {
     }
 
     @Override
-    public Optional<UserType> findById(Long id) {
+    public Optional<UserType> findById(Integer id) {
         return userTypeRepository.findById(id);
     }
 

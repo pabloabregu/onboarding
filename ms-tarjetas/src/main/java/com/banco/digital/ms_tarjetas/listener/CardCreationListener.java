@@ -1,6 +1,6 @@
 package com.banco.digital.ms_tarjetas.listener;
 
-import com.banco.digital.ms_tarjetas.request.RegisterCardRequest;
+import com.banco.digital.ms_tarjetas.request.UserCardRequest;
 import com.banco.digital.ms_tarjetas.service.CardProcessorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ public class CardCreationListener {
 
     @KafkaListener(topics = "${kafka-topic.nueva-cuenta}", groupId = "${spring.kafka.consumer.group-id}")
     public void cardCreation(String request) throws JsonProcessingException {
-        RegisterCardRequest registerCardRequest = new ObjectMapper().readValue(request, RegisterCardRequest.class);
-        cardProcessorService.processCardCreation(registerCardRequest);
+        UserCardRequest userCardRequest = new ObjectMapper().readValue(request, UserCardRequest.class);
+        cardProcessorService.processCardCreation(userCardRequest);
     }
 }

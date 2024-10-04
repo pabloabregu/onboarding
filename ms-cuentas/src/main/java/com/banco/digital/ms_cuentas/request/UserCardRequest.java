@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCardRequest {
-    private Integer accountNumber;
+    private String accountNumber;
 }
