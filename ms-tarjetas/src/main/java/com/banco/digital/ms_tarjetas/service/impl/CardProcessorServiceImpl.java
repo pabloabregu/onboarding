@@ -26,7 +26,7 @@ public class CardProcessorServiceImpl implements CardProcessorService {
 
     @Override
     public RegisterCardResponse processCardCreation(RegisterCardRequest registerCardRequest) {
-        logger.info("Generate credit card...");
+        logger.info("Generar tarjetas...");
 
         Card card = cardGeneratorService.generateCreditCard(registerCardRequest);
         cardService.save(card);
