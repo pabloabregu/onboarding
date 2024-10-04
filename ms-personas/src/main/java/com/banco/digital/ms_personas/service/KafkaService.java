@@ -3,7 +3,6 @@ package com.banco.digital.ms_personas.service;
 import com.banco.digital.ms_personas.model.User;
 import com.banco.digital.ms_personas.request.UserAccountRequest;
 import com.banco.digital.ms_personas.request.UserRegisterRequest;
-import com.banco.digital.ms_personas.service.impl.UserOnboardingServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

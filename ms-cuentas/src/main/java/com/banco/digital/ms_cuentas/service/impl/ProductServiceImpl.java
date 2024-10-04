@@ -46,20 +46,20 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Salary must be positive.");
 
         if (!isRenaperAuthorized && salary.compareTo(new BigDecimal("200000")) >= 0)
-            return new Product("Cuenta PESOS $");
+            return new Product("Cuenta PESOS $", "ARS");
 
         if (isRenaperAuthorized && !isWorldSysTerrorist) {
             if (verazScore <= 0.1 && salary.compareTo(new BigDecimal("999000")) >= 0) {
-                return new Product("Cuenta Dólar y pesos+ Tarjeta Black");
+                return new Product("Cuenta Dólar y pesos+ Tarjeta Black", "USD");
             }
             if (verazScore <= 0.5 && salary.compareTo(new BigDecimal("999000")) >= 0) {
-                return new Product("Cuenta Dólar y pesos+ Tarjeta Gold");
+                return new Product("Cuenta Dólar y pesos+ Tarjeta Gold", "USD");
             }
             if (verazScore <= 1.0 && salary.compareTo(new BigDecimal("827000")) >= 0) {
-                return new Product("Cuenta Dólar y Pesos+ Tarjeta Basic");
+                return new Product("Cuenta Dólar y Pesos+ Tarjeta Basic", "USD");
             }
             if (verazScore <= 1.5 && salary.compareTo(new BigDecimal("446000")) >= 0) {
-                return new Product("Cuenta Dólar y Pesos");
+                return new Product("Cuenta Dólar y Pesos", "USD");
             }
         }
         return null;
