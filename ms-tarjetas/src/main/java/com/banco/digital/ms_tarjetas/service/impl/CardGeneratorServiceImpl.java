@@ -19,13 +19,10 @@ import java.util.Random;
 public class CardGeneratorServiceImpl implements CardGeneratorService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/yy");
     private final Random random = new Random();
-    private final CardService cardService;
-
     private final CardStatusService cardStatusService;
 
     @Autowired
-    public CardGeneratorServiceImpl(CardService cardService, CardStatusService cardStatusService) {
-        this.cardService = cardService;
+    public CardGeneratorServiceImpl(CardStatusService cardStatusService) {
         this.cardStatusService = cardStatusService;
     }
 
