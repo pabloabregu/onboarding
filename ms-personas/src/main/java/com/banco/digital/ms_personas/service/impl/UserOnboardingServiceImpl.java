@@ -40,14 +40,17 @@ public class UserOnboardingServiceImpl implements UserOnboardingService {
         if (userOptional.isEmpty())
             return handleRegisterNewCustomer(userRegisterRequest);
 
-        User user = userOptional.get();
-        String userState = user.getState().getDescription();
-        return switch (userState) {
-            case State.ACTIVO -> handleAlreadyActiveCustomer(userRegisterRequest);
-            case State.INACTIVO -> handleReactivateCustomer(userRegisterRequest);
-            case State.BLOQUEADO -> handleBlockedCustomer(userRegisterRequest);
-            default -> throw new IllegalStateException("Unexpected value: " + userState);
-        };
+        else {
+            User user = userOptional.get();
+            String userState = user.getState().getDescription();
+            logger.info("Estado de usuario : {}", userState);
+            return switch (userState) {
+                case State.ACTIVO -> handleAlreadyActiveCustomer(userRegisterRequest);
+                case State.INACTIVO -> handleReactivateCustomer(userRegisterRequest);
+                case State.BLOQUEADO -> handleBlockedCustomer(userRegisterRequest);
+                default -> throw new IllegalStateException("Unexpected value: " + userState);
+            };
+        }
     }
 
     private RegisterUserResponse handleRegisterNewCustomer(UserRegisterRequest userRegisterRequest) {
@@ -81,7 +84,7 @@ public class UserOnboardingServiceImpl implements UserOnboardingService {
 
     private RegisterUserResponse handleReactivateCustomer(UserRegisterRequest userRegisterRequest) {
         logger.info("Usuario inactivo con DNI : {}", userRegisterRequest.getDni());
-        userService.changeStateFromUser(userRegisterRequest, State.ACTIVO);
+        userService.activateUser(userRegisterRequest);
         return new RegisterUserResponse("User reactivated!", HttpStatus.CONFLICT.value());
     }
 

@@ -1,7 +1,7 @@
 package com.banco.digital.ms_personas.service.impl;
 
-import com.banco.digital.ms_personas.enums.State;
-import com.banco.digital.ms_personas.enums.Type;
+import com.banco.digital.ms_personas.enums.UserStateEnum;
+import com.banco.digital.ms_personas.enums.UserTypeEnum;
 import com.banco.digital.ms_personas.model.User;
 import com.banco.digital.ms_personas.model.UserState;
 import com.banco.digital.ms_personas.model.UserType;
@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User generateUser(UserRegisterRequest userRegisterRequest) {
-        UserState userState = userStateService.findByDescription(State.ACTIVO.name());
-        UserType userType = userTypeService.findByDescription(Type.CLIENTE.name());
+        UserState userState = userStateService.findByDescription(UserStateEnum.ACTIVO.name());
+        UserType userType = userTypeService.findByDescription(UserTypeEnum.CLIENTE.name());
         User user = User.builder()
                 .firstname(userRegisterRequest.getFirstname())
                 .lastname(userRegisterRequest.getLastname())
@@ -62,8 +62,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeStateFromUser(UserRegisterRequest userRegisterRequest, String activo) {
+    public void activateUser(UserRegisterRequest userRegisterRequest) {
+        UserState userState = userStateService.findByDescription(UserStateEnum.ACTIVO.getType());
 
+        Optional<User> user = userRepository.findByDni(userRegisterRequest.getDni());
+        user.ifPresent(value -> value.setState(userState));
     }
-
 }
