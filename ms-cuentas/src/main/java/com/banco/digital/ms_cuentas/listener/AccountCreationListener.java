@@ -1,7 +1,7 @@
 package com.banco.digital.ms_cuentas.listener;
 
 import com.banco.digital.ms_cuentas.request.UserAccountRequest;
-import com.banco.digital.ms_cuentas.service.AccountEventProcessorService;
+import com.banco.digital.ms_cuentas.service.AccountProcessorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +16,17 @@ import java.net.URISyntaxException;
 public class AccountCreationListener {
     private final Logger logger = LoggerFactory.getLogger(AccountCreationListener.class);
 
-    private final AccountEventProcessorService accountEventProcessorService;
+    private final AccountProcessorService accountProcessorService;
 
     @Autowired
-    public AccountCreationListener(AccountEventProcessorService accountEventProcessorService) {
-        this.accountEventProcessorService = accountEventProcessorService;
+    public AccountCreationListener(AccountProcessorService accountProcessorService) {
+        this.accountProcessorService = accountProcessorService;
     }
 
     @KafkaListener(topics = "${kafka-topic.nuevo-usuario}", groupId = "${spring.kafka.consumer.group-id}")
     public void accountCreation(String request) throws IOException, URISyntaxException, InterruptedException {
         logger.info("Account creation...");
         UserAccountRequest userAccountRequest = new ObjectMapper().readValue(request, UserAccountRequest.class);
-        accountEventProcessorService.processAccountCreation(userAccountRequest);
+        accountProcessorService.processAccountCreation(userAccountRequest);
     }
 }

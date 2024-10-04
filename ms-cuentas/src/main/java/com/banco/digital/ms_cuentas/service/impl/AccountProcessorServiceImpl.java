@@ -5,6 +5,7 @@ import com.banco.digital.ms_cuentas.model.AccountStatus;
 import com.banco.digital.ms_cuentas.model.CurrencyCode;
 import com.banco.digital.ms_cuentas.model.ExternalValidationResult;
 import com.banco.digital.ms_cuentas.request.UserAccountRequest;
+import com.banco.digital.ms_cuentas.response.RegisterAccountResponse;
 import com.banco.digital.ms_cuentas.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,8 @@ import java.math.BigDecimal;
 import java.net.URISyntaxException;
 
 @Service
-public class AccountEventProcessorServiceImpl implements AccountEventProcessorService {
-    private final Logger logger = LoggerFactory.getLogger(AccountEventProcessorServiceImpl.class);
+public class AccountProcessorServiceImpl implements AccountProcessorService {
+    private final Logger logger = LoggerFactory.getLogger(AccountProcessorServiceImpl.class);
 
     private final AccountService accountService;
     private final CurrencyCodeService currencyCodeService;
@@ -25,9 +26,9 @@ public class AccountEventProcessorServiceImpl implements AccountEventProcessorSe
     private final ExternalValidationService externalValidationService;
 
     @Autowired
-    public AccountEventProcessorServiceImpl(AccountService accountService, CurrencyCodeService currencyCodeService,
-                                            AccountStatusService accountStatusService,
-                                            ExternalValidationService externalValidationService) {
+    public AccountProcessorServiceImpl(AccountService accountService, CurrencyCodeService currencyCodeService,
+                                       AccountStatusService accountStatusService,
+                                       ExternalValidationService externalValidationService) {
         this.accountService = accountService;
         this.currencyCodeService = currencyCodeService;
         this.accountStatusService = accountStatusService;
@@ -35,8 +36,8 @@ public class AccountEventProcessorServiceImpl implements AccountEventProcessorSe
     }
 
     @Override
-    public void processAccountCreation(UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
-        logger.info("User Request : {}", userAccountRequest.toString());
+    public RegisterAccountResponse processAccountCreation(UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
+        logger.info("Generar cuentas...");
 
         String dni = userAccountRequest.getDni();
         Long persNum = userAccountRequest.getPersNum();
@@ -54,5 +55,6 @@ public class AccountEventProcessorServiceImpl implements AccountEventProcessorSe
         logger.info("Creat account : {}", account);
 
         // Send event
+        return null;
     }
 }

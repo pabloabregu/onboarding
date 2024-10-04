@@ -1,10 +1,9 @@
 package com.banco.digital.ms_cuentas.controller;
 
 import com.banco.digital.ms_cuentas.request.UserAccountRequest;
-import com.banco.digital.ms_cuentas.response.Response;
-import com.banco.digital.ms_cuentas.service.AccountEventProcessorService;
+import com.banco.digital.ms_cuentas.response.RegisterAccountResponse;
+import com.banco.digital.ms_cuentas.service.AccountProcessorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,16 +16,16 @@ import java.net.URISyntaxException;
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
-    private final AccountEventProcessorService accountEventProcessorService;
+    private final AccountProcessorService accountProcessorService;
 
     @Autowired
-    public AccountController(AccountEventProcessorService accountEventProcessorService) {
-        this.accountEventProcessorService = accountEventProcessorService;
+    public AccountController(AccountProcessorService accountProcessorService) {
+        this.accountProcessorService = accountProcessorService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Response> create(@RequestBody UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
-        accountEventProcessorService.processAccountCreation(userAccountRequest);
-        return ResponseEntity.ok(new Response("CREATE!", HttpStatus.CREATED.value()));
+    @PostMapping("/register")
+    public ResponseEntity<RegisterAccountResponse> create(@RequestBody UserAccountRequest userAccountRequest) throws URISyntaxException, IOException, InterruptedException {
+        RegisterAccountResponse response = accountProcessorService.processAccountCreation(userAccountRequest);
+        return ResponseEntity.status(response.getHttpStatusCode()).body(response);
     }
 }
